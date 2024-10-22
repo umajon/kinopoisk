@@ -92,6 +92,11 @@ searchButtonElement.addEventListener('click', async () => {
                             >
                             Подробнее
                         </a>
+                         <a
+                            href="#"
+                            class="btn btn-primary"                            >
+                            Добавить в избранное
+                        </a>
                     </div>
                 </div>`;
 
@@ -204,4 +209,5 @@ exampleModal.addEventListener('show.bs.modal', function (event) {
 
 
 
-// тут новый комментарий 
+
+ 
