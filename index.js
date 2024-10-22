@@ -28,6 +28,8 @@
 
 // document.body.append(marqueeElement)
 
+
+//Тянем данные с сервиса: 
 const API_KEY = "565e1e39"
 
 async function fetchData(title) {
@@ -35,51 +37,91 @@ async function fetchData(title) {
     const data = await response.json()
     return data
 }
-
 const searchInputElement = document.querySelector('#movie-search-input')
 const searchButtonElement = document.querySelector('#movie-search-button')
+const spinnerElement = document.querySelector('#loading-spinner')
+
+// Добавляем обработчик события для нажатия клавиши Enter в поле ввода
+searchInputElement.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        // Если нажата клавиша Enter, вызываем событие клика на кнопку
+        searchButtonElement.click();
+    }
+});
+
+
+// Получаем элементы для тостеров
+const successToastElement = document.querySelector('#success-toast')
+const errorToastElement = document.querySelector('#error-toast')
 
 let movieTitleValue = ''
 
 searchButtonElement.addEventListener('click', async () => {
+    // Показать спиннер, удаляя класс 'd-none'
+    spinnerElement.classList.remove('d-none')
+
     movieTitleValue = searchInputElement.value
-    const movie = await fetchData(movieTitleValue)
-    const cardElementTemplate = `
-   <div class="card" style="width: 18rem">
-        <img
-        src="${movie.Poster}"
-        class="card-img-top"
-        alt="${movie.Title} movie poster"
-        />
-        <div class="card-body">
-            <h5 class="card-title">${movie.Title}</h5>
-            <p class="card-text">${movie.Plot}</p>
-            <a
-                href="#"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-                data-movie-title="${movie.Title}"
-                data-movie-director="${movie.Director}"
-                data-movie-year="${movie.Year}"
-                data-movie-plot="${movie.Plot}"
-                data-movie-imdbrating="${movie.imdbRating}"
-                data-movie-boxoffice="${movie.BoxOffice}"
-                data-movie-actors="${movie.Actors}"
-                data-movie-awards="${movie.Awards}"
-                data-movie-poster="${movie.Poster}" <!-- Добавляем постер как data-атрибут -->
-                >
-                Подробнее
-            </a>
-        </div>
-    </div>`;
+    try {
+        const movie = await fetchData(movieTitleValue)
 
-    const searchResultsContainer = document.querySelector('.search-results')
+        if (movie && movie.Title) {
+            const cardElementTemplate = `
+               <div class="card" style="width: 18rem">
+                    <img
+                    src="${movie.Poster}"
+                    class="card-img-top"
+                    alt="${movie.Title} movie poster"
+                    />
+                    <div class="card-body">
+                        <h5 class="card-title">${movie.Title}</h5>
+                        <p class="card-text">${movie.Plot}</p>
+                        <a
+                            href="#"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            data-movie-title="${movie.Title}"
+                            data-movie-director="${movie.Director}"
+                            data-movie-year="${movie.Year}"
+                            data-movie-plot="${movie.Plot}"
+                            data-movie-imdbrating="${movie.imdbRating}"
+                            data-movie-boxoffice="${movie.BoxOffice}"
+                            data-movie-actors="${movie.Actors}"
+                            data-movie-awards="${movie.Awards}"
+                            data-movie-poster="${movie.Poster}"
+                            >
+                            Подробнее
+                        </a>
+                    </div>
+                </div>`;
 
-    console.log(searchResultsContainer.children)
+            const searchResultsContainer = document.querySelector('.search-results')
+            searchResultsContainer.insertAdjacentHTML('beforeend', cardElementTemplate)
 
-    searchResultsContainer.insertAdjacentHTML('beforeend', cardElementTemplate)
+            // Показать тостер об успешном поиске
+            const toast = new bootstrap.Toast(successToastElement)
+            toast.show()
+
+        } else {
+            // Если фильм не найден, показать ошибочный тостер
+            const toast = new bootstrap.Toast(errorToastElement)
+            toast.show()
+        }
+    } catch (error) {
+        console.error('Error fetching movie data:', error)
+
+        // Показать тостер об ошибке при поиске
+        const toast = new bootstrap.Toast(errorToastElement)
+        toast.show()
+    } finally {
+        // Скрыть спиннер после завершения поиска
+        spinnerElement.classList.add('d-none')
+    }
 })
+
+
+
+
 
     // Функция для очистки содержимого элемента с классом 'search-results'
     function clearSearchResults() {
@@ -162,3 +204,4 @@ exampleModal.addEventListener('show.bs.modal', function (event) {
 
 
 
+// тут новый комментарий 

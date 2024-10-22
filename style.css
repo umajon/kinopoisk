@@ -21,3 +21,12 @@
   width: 100%;
 
 }
+
+
+#movie-search-input {
+  text-transform: uppercase;
+}
+
+.placeholder {
+  text-transform: lowercase;
+}
