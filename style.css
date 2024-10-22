@@ -1,0 +1,23 @@
+.card {
+  margin-bottom: 3rem;
+}
+
+.card-body h5 {
+  text-transform: uppercase;
+}
+
+#exampleModalLabel {
+  text-transform: uppercase;
+  align-items: center;
+}
+
+
+.modal-body p {
+  padding: 0px 20px 20px 20px;
+
+}
+
+.modal-body img {
+  width: 100%;
+
+}
