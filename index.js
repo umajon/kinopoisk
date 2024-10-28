@@ -1,34 +1,3 @@
-// const print = console.log
-
-// for(let elem of [1, 2, 3]) {
-//     console.log(elem)
-// }
-
-// let arr = [10, 20, 30]
-
-// for(let i = 0; i < arr.length; i++) {
-//     print(arr[i])
-// }
-
-// [100, 200, 300].forEach((num) => {
-//     print(num)
-// })
-
-// const studentName = 'Ayubkhan'
-
-// const strikeElementString = `<s>${studentName}</s>`
-
-// print(strikeElementString)
-
-// document.body.insertAdjacentHTML('beforeend', strikeElementString)
-
-// const marqueeElement = document.createElement('marquee')
-
-// marqueeElement.textContent = studentName
-
-// document.body.append(marqueeElement)
-
-
 //Тянем данные с сервиса: 
 const API_KEY = "565e1e39"
 
@@ -92,9 +61,12 @@ searchButtonElement.addEventListener('click', async () => {
                             >
                             Подробнее
                         </a>
-                         <a
+                         
+                        <a
                             href="#"
-                            class="btn btn-primary"                            >
+                            class="btn btn-primary"
+                            id="add-fav-btn"
+                                                        >
                             Добавить в избранное
                         </a>
                     </div>
@@ -102,7 +74,22 @@ searchButtonElement.addEventListener('click', async () => {
 
             const searchResultsContainer = document.querySelector('.search-results')
             searchResultsContainer.insertAdjacentHTML('beforeend', cardElementTemplate)
-
+           
+            const addFavButton = document.getElementById('add-fav-btn')
+            addFavButton.addEventListener('click', () => {
+        
+                if(localStorage.getItem('favMovies') === null) {
+                    const favMoviesList = []
+                    favMoviesList.push(movie)
+                    localStorage.setItem('favMovies', JSON.stringify(favMoviesList))
+                    return
+                }
+        
+                const favMoviesList = JSON.parse(localStorage.getItem('favMovies'))
+                favMoviesList.push(movie)
+                localStorage.setItem('favMovies', JSON.stringify(favMoviesList))
+            })
+        
             // Показать тостер об успешном поиске
             const toast = new bootstrap.Toast(successToastElement)
             toast.show()
@@ -122,10 +109,9 @@ searchButtonElement.addEventListener('click', async () => {
         // Скрыть спиннер после завершения поиска
         spinnerElement.classList.add('d-none')
     }
+
 })
-
-
-
+    
 
 
     // Функция для очистки содержимого элемента с классом 'search-results'
@@ -206,8 +192,3 @@ exampleModal.addEventListener('show.bs.modal', function (event) {
     modalBody.appendChild(BoxOffice);
     modalBody.appendChild(Awards);
 });
-
-
-
-
- 
